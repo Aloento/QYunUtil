@@ -12,22 +12,27 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
 
     public ByteStream(byte[] array) {
         super(array);
+        trueLen = array.length;
     }
 
     public ByteStream(byte[] array, int offset, int length) {
         super(array, offset, length);
+        trueLen = offset + length;
     }
 
     public ByteStream(InputStream inputStream) throws IOException {
         super(inputStream);
+        trueLen = inputStream.available();
     }
 
     public ByteStream(ByteArrayOutputStream outputStream) {
         super(outputStream);
+        trueLen = outputStream.size();
     }
 
     public ByteStream(File file) throws IOException {
         super(file);
+        trueLen = Math.toIntExact(file.length());
     }
 
     @Override
@@ -145,7 +150,7 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
     @Override
     public void write(byte[] b, int off, int len) {
         byteBuffer.put(b, off, len);
-        trueLen += len;
+        trueLen += off + len;
     }
 
     @Override
