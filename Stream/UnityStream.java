@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
@@ -31,6 +32,10 @@ public class UnityStream extends ByteStream {
 
     public UnityStream(File file) throws IOException {
         super(file);
+    }
+
+    public UnityStream(ByteBuffer buffer) {
+        super(buffer);
     }
 
     public void alignStream() {
@@ -96,8 +101,7 @@ public class UnityStream extends ByteStream {
 
     @Override
     public UnityStream setToReadOnly() {
-        super.setToReadOnly();
-        return this;
+        return new UnityStream(byteBuffer.asReadOnlyBuffer());
     }
 
     @Override

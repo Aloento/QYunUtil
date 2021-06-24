@@ -27,6 +27,10 @@ public abstract class ByteBufferWrapper {
         this(outputStream.toByteArray());
     }
 
+    public ByteBufferWrapper(ByteBuffer buffer) {
+        byteBuffer = buffer;
+    }
+
     public ByteBufferWrapper(File file) throws IOException {
         this(new FileInputStream(file));
     }
@@ -55,10 +59,7 @@ public abstract class ByteBufferWrapper {
         return byteBuffer.capacity();
     }
 
-    public ByteBufferWrapper setToReadOnly() {
-        byteBuffer = byteBuffer.asReadOnlyBuffer();
-        return this;
-    }
+    public abstract ByteBufferWrapper setToReadOnly();
 
     public ByteBufferWrapper setByteOrder(ByteOrder byteOrder) {
         byteBuffer.order(byteOrder);

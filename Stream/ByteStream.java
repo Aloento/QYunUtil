@@ -1,6 +1,7 @@
 package com.QYun.util.Stream;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutput {
@@ -28,6 +29,11 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
     public ByteStream(ByteArrayOutputStream outputStream) {
         super(outputStream);
         trueLen = outputStream.size();
+    }
+
+    public ByteStream(ByteBuffer buffer) {
+        super(buffer);
+        trueLen = buffer.capacity();
     }
 
     public ByteStream(File file) throws IOException {
@@ -222,8 +228,7 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
 
     @Override
     public ByteStream setToReadOnly() {
-        super.setToReadOnly();
-        return this;
+        return new ByteStream(byteBuffer.asReadOnlyBuffer());
     }
 
     @Override
