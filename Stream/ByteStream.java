@@ -108,6 +108,14 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
         return byteBuffer.getInt();
     }
 
+    public int[] readInts(int n) {
+        int[] array = new int[n];
+        for (int i = 0; i < n; i++) {
+            array[i] = readInt();
+        }
+        return array;
+    }
+
     @Override
     public long readLong() {
         return byteBuffer.getLong();
