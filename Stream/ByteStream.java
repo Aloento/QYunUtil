@@ -1,5 +1,7 @@
 package com.QYun.util.Stream;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -245,7 +247,7 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
         return this;
     }
 
-    public void copyTo(ByteStream dest, long size) {
+    public void copyTo(@NotNull ByteStream dest, long size) {
         dest.write(readBytes(Math.min(trueLen, Math.toIntExact(size))));
     }
 }
