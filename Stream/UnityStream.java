@@ -38,6 +38,10 @@ public class UnityStream extends ByteStream {
         super(buffer);
     }
 
+    public UnityStream(UnityStream reader) {
+        super(reader.byteBuffer);
+    }
+
     public void alignStream() {
         alignStream(4);
     }
