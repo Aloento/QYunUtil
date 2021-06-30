@@ -95,6 +95,14 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
         return byteBuffer.getShort();
     }
 
+    public short[] readShorts(int n) {
+        short[] array = new short[n];
+        for (int i = 0; i < n; i++) {
+            array[i] = readShort();
+        }
+        return array;
+    }
+
     @Override
     public int readUnsignedShort() {
         return byteBuffer.getShort();
