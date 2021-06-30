@@ -54,7 +54,7 @@ public class UnityStream extends ByteStream {
 
     public String readAlignedString() {
         int length = readInt();
-        if (length > 0 && length <= length - getPos()) {
+        if (length > 0 && length <= trueLen - getPos()) {
             var str = new String(readBytes(length), StandardCharsets.UTF_8);
             alignStream();
             return str;
