@@ -62,6 +62,14 @@ public class UnityStream extends ByteStream {
         return "";
     }
 
+    public String[] readStrings(int n) {
+        var array = new String[n];
+        for (int i = 0; i < n; i++) {
+            array[i] = readAlignedString();
+        }
+        return array;
+    }
+
     public String readStringToNull() {
         return readStringToNull(32767);
     }
@@ -85,6 +93,14 @@ public class UnityStream extends ByteStream {
 
     public Vector2f readVector2() {
         return new Vector2f(readFloat(), readFloat());
+    }
+
+    public Vector2f[] readVector2s(int n) {
+        var array = new Vector2f[n];
+        for (int i = 0; i < n; i++) {
+            array[i] = readVector2();
+        }
+        return array;
     }
 
     public Vector3f readVector3() {
