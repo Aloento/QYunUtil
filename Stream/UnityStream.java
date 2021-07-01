@@ -119,6 +119,14 @@ public class UnityStream extends ByteStream {
         return new Matrix4f(readFloats(16));
     }
 
+    public Matrix4f[] readMatrixs(int n) {
+        var array = new Matrix4f[n];
+        for (int i = 0; i < n; i++) {
+            array[i] = readMatrix();
+        }
+        return array;
+    }
+
     @Override
     public UnityStream setToReadOnly() {
         return new UnityStream(byteBuffer.asReadOnlyBuffer());
