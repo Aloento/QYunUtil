@@ -182,13 +182,13 @@ public class UnityStream extends ByteStream {
         return readInts(n);
     }
 
-    public Integer[] ReadUint32Array() {
+    public Integer[] ReadUInt32Array() {
         return readInts(readInt());
     }
 
     public Integer[][] ReadUint32ArrayArray() {
         var cap = readInt();
-        return readArray(this::ReadUint32Array, new Integer[cap][cap]);
+        return readArray(this::ReadUInt32Array, new Integer[cap][cap]);
     }
 
     public Integer[] ReadUint32Array(int n) {
