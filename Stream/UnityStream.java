@@ -48,6 +48,10 @@ public class UnityStream extends ByteStream {
         super(reader.byteBuffer);
     }
 
+    public Byte ReadByte() {
+        return readByte();
+    }
+
     public Boolean ReadBoolean() {
         return readBoolean();
     }
@@ -166,11 +170,11 @@ public class UnityStream extends ByteStream {
         return readBooleans(readInt());
     }
 
-    public Byte[] ReadUint8Array() {
+    public Byte[] ReadUInt8Array() {
         return readBytes(readInt());
     }
 
-    public Short[] ReadUint16Array() {
+    public Short[] ReadUInt16Array() {
         return readShorts(readInt());
     }
 
@@ -191,7 +195,7 @@ public class UnityStream extends ByteStream {
         return readArray(this::ReadUInt32Array, new Integer[cap][cap]);
     }
 
-    public Integer[] ReadUint32Array(int n) {
+    public Integer[] ReadUInt32Array(int n) {
         return readArray(this::readInt, new Integer[n]);
     }
 
