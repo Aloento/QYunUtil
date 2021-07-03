@@ -74,6 +74,10 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
         return 0 != byteBuffer.get();
     }
 
+    public boolean[] readBooleans(int n) {
+        return ArrayUtils.toPrimitive(readArray(this::readBoolean, new Boolean[n]));
+    }
+
     @Override
     public byte readByte() {
         return byteBuffer.get();
