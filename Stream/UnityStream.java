@@ -48,6 +48,38 @@ public class UnityStream extends ByteStream {
         super(reader.byteBuffer);
     }
 
+    public Short ReadInt16() {
+        return readShort();
+    }
+
+    public Integer ReadInt32() {
+        return readInt();
+    }
+
+    public Long ReadInt64() {
+        return readLong();
+    }
+
+    public Short ReadUInt16() {
+        return readShort();
+    }
+
+    public Integer ReadUInt32() {
+        return readInt();
+    }
+
+    public Long ReadUInt64() {
+        return readLong();
+    }
+
+    public Float ReadSingle() {
+        return readFloat();
+    }
+
+    public Double ReadDouble() {
+        return readDouble();
+    }
+
     public void AlignStream() {
         AlignStream(4);
     }
