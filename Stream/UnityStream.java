@@ -103,6 +103,11 @@ public class UnityStream extends ByteStream {
         return new Vector4f(readFloat(), readFloat(), readFloat(), readFloat());
     }
 
+    public Vector3f read4ToVector3() {
+        var tmp = readVector4();
+        return new Vector3f(tmp.x, tmp.y, tmp.z);
+    }
+
     public Color4f readColor4() {
         return new Color4f(readFloat(), readFloat(), readFloat(), readFloat());
     }
