@@ -1,10 +1,12 @@
 package com.QYun.util.Stream;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.function.Supplier;
 
 public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutput {
     public int trueLen;
@@ -78,11 +80,7 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
     }
 
     public byte[] readBytes(int n) {
-        var array = new byte[n];
-        for (int i = 0; i < n; i++) {
-            array[i] = readByte();
-        }
-        return array;
+        return ArrayUtils.toPrimitive(readArray(this::readByte, new Byte[n]));
     }
 
     @Override
@@ -96,11 +94,7 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
     }
 
     public short[] readShorts(int n) {
-        short[] array = new short[n];
-        for (int i = 0; i < n; i++) {
-            array[i] = readShort();
-        }
-        return array;
+        return ArrayUtils.toPrimitive(readArray(this::readShort, new Short[n]));
     }
 
     @Override
@@ -119,11 +113,7 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
     }
 
     public int[] readInts(int n) {
-        int[] array = new int[n];
-        for (int i = 0; i < n; i++) {
-            array[i] = readInt();
-        }
-        return array;
+        return ArrayUtils.toPrimitive(readArray(this::readInt, new Integer[n]));
     }
 
     @Override
@@ -137,11 +127,7 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
     }
 
     public float[] readFloats(int n) {
-        float[] array = new float[n];
-        for (int i = 0; i < n; i++) {
-            array[i] = readFloat();
-        }
-        return array;
+        return ArrayUtils.toPrimitive(readArray(this::readFloat, new Float[n]));
     }
 
     @Override
@@ -149,11 +135,13 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
         return byteBuffer.getDouble();
     }
 
+    @Deprecated
     @Override
     public String readLine() {
         throw new UnsupportedOperationException();
     }
 
+    @Deprecated
     @Override
     public String readUTF() {
         throw new UnsupportedOperationException();
@@ -253,6 +241,13 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
     public ByteStream setByteOrder(ByteOrder byteOrder) {
         super.setByteOrder(byteOrder);
         return this;
+    }
+
+    public <T> T[] readArray(Supplier<T> supplier, T[] array) {
+        for (int i = 0; i < array.length; i++) {
+            array[i] = supplier.get();
+        }
+        return array;
     }
 
     public void copyTo(@NotNull ByteStream dest, long size) {
