@@ -3,12 +3,15 @@ package com.QYun.util.Stream;
 import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.function.Supplier;
 
-public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutput {
+public class ByteStream extends ByteBufferWrapper {
     public int trueLen;
 
     public ByteStream(int capacity) {
@@ -16,6 +19,11 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
     }
 
     public ByteStream(byte[] array) {
+        super(array);
+        trueLen = array.length;
+    }
+
+    public ByteStream(Byte[] array) {
         super(array);
         trueLen = array.length;
     }
@@ -45,17 +53,14 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
         trueLen = Math.toIntExact(file.length());
     }
 
-    @Override
     public void readFully(byte[] b) {
         readFully(b, 0, b.length);
     }
 
-    @Override
     public void readFully(byte[] b, int off, int len) {
         byteBuffer.get(b, off, len);
     }
 
-    @Override
     public int skipBytes(int n) {
         if (n <= 0)
             return 0;
@@ -69,179 +74,166 @@ public class ByteStream extends ByteBufferWrapper implements DataInput, DataOutp
         return skipped;
     }
 
-    @Override
-    public boolean readBoolean() {
+    public Boolean readBoolean() {
         return 0 != byteBuffer.get();
     }
 
-    public boolean[] readBooleans(int n) {
-        return ArrayUtils.toPrimitive(readArray(this::readBoolean, new Boolean[n]));
+    public Boolean[] readBooleans(int n) {
+        return readArray(this::readBoolean, new Boolean[n]);
     }
 
-    @Override
-    public byte readByte() {
+    public Byte readByte() {
         return byteBuffer.get();
     }
 
-    public byte[] readBytes(int n) {
-        return ArrayUtils.toPrimitive(readArray(this::readByte, new Byte[n]));
+    public Byte[] readBytes(int n) {
+        return readArray(this::readByte, new Byte[n]);
     }
 
-    @Override
-    public int readUnsignedByte() {
-        return byteBuffer.get();
+    public Integer readUnsignedByte() {
+        return (int) byteBuffer.get();
     }
 
-    @Override
-    public short readShort() {
+    public Short readShort() {
         return byteBuffer.getShort();
     }
 
-    public short[] readShorts(int n) {
-        return ArrayUtils.toPrimitive(readArray(this::readShort, new Short[n]));
+    public Short[] readShorts(int n) {
+        return readArray(this::readShort, new Short[n]);
     }
 
-    @Override
-    public int readUnsignedShort() {
-        return byteBuffer.getShort();
+    public Integer readUnsignedShort() {
+        return (int) byteBuffer.getShort();
     }
 
-    @Override
-    public char readChar() {
+    public Character readChar() {
         return byteBuffer.getChar();
     }
 
-    @Override
-    public int readInt() {
+    public Integer readInt() {
         return byteBuffer.getInt();
     }
 
-    public int[] readInts(int n) {
-        return ArrayUtils.toPrimitive(readArray(this::readInt, new Integer[n]));
+    public Integer[] readInts(int n) {
+        return readArray(this::readInt, new Integer[n]);
     }
 
-    @Override
-    public long readLong() {
+    public Long readLong() {
         return byteBuffer.getLong();
     }
 
-    @Override
-    public float readFloat() {
+    public Float readFloat() {
         return byteBuffer.getFloat();
     }
 
-    public float[] readFloats(int n) {
-        return ArrayUtils.toPrimitive(readArray(this::readFloat, new Float[n]));
+    public Float[] readFloats(int n) {
+        return readArray(this::readFloat, new Float[n]);
     }
 
-    @Override
-    public double readDouble() {
+    public Double readDouble() {
         return byteBuffer.getDouble();
     }
 
     @Deprecated
-    @Override
     public String readLine() {
         throw new UnsupportedOperationException();
     }
 
     @Deprecated
-    @Override
     public String readUTF() {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public void write(int b) {
         byteBuffer.put((byte) b);
         trueLen++;
     }
 
-    @Override
+    public void write(Integer b) {
+        byteBuffer.put(b.byteValue());
+        trueLen++;
+    }
+
     public void write(byte[] b) {
         byteBuffer.put(b);
         trueLen += b.length;
     }
 
-    @Override
+    public void write(Byte[] b) {
+        byteBuffer.put(ArrayUtils.toPrimitive(b));
+        trueLen += b.length;
+    }
+
     public void write(byte[] b, int off, int len) {
         byteBuffer.put(b, off, len);
         trueLen += off + len;
     }
 
-    @Override
-    public void writeBoolean(boolean v) {
+    public void write(Byte[] b, int off, int len) {
+        byteBuffer.put(ArrayUtils.toPrimitive(b), off, len);
+        trueLen += off + len;
+    }
+
+    public void writeBoolean(Boolean v) {
         byteBuffer.put((byte) (v ? 1 : 0));
         trueLen++;
     }
 
-    @Override
-    public void writeByte(int v) {
-        byteBuffer.put((byte) v);
+    public void writeByte(Integer v) {
+        byteBuffer.put(v.byteValue());
         trueLen++;
     }
 
-    @Override
-    public void writeShort(int v) {
-        byteBuffer.putShort((short) v);
+    public void writeShort(Integer v) {
+        byteBuffer.putShort(v.shortValue());
         trueLen += 2;
     }
 
-    @Override
-    public void writeChar(int v) {
-        byteBuffer.putChar((char) v);
+    public void writeChar(Integer v) {
+        byteBuffer.putChar((char) v.shortValue());
         trueLen += 2;
     }
 
-    @Override
-    public void writeInt(int v) {
+    public void writeInt(Integer v) {
         byteBuffer.putInt(v);
         trueLen += 4;
     }
 
-    @Override
-    public void writeLong(long v) {
+    public void writeLong(Long v) {
         byteBuffer.putLong(v);
         trueLen += 8;
     }
 
-    @Override
-    public void writeFloat(float v) {
+    public void writeFloat(Float v) {
         byteBuffer.putFloat(v);
         trueLen += 4;
     }
 
-    @Override
-    public void writeDouble(double v) {
+    public void writeDouble(Double v) {
         byteBuffer.putDouble(v);
         trueLen += 8;
     }
 
-    @Override
     public void writeBytes(String s) {
         for (int i = 0; i < s.length(); i++)
             byteBuffer.put((byte) s.charAt(i));
         trueLen += s.length();
     }
 
-    @Override
     public void writeChars(String s) {
         for (int i = 0; i < s.length(); i++)
             byteBuffer.putChar(s.charAt(i));
         trueLen += s.length();
     }
 
-    @Override
     public void writeUTF(String s) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public ByteStream setToReadOnly() {
         return new ByteStream(byteBuffer.asReadOnlyBuffer());
     }
 
-    @Override
     public ByteStream setByteOrder(ByteOrder byteOrder) {
         super.setByteOrder(byteOrder);
         return this;

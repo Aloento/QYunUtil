@@ -1,5 +1,7 @@
 package com.QYun.util.Stream;
 
+import org.apache.commons.lang.ArrayUtils;
+
 import javax.vecmath.*;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -12,6 +14,10 @@ import java.nio.charset.StandardCharsets;
 public class UnityStream extends ByteStream {
     public UnityStream(int capacity) {
         super(capacity);
+    }
+
+    public UnityStream(Byte[] array) {
+        super(array);
     }
 
     public UnityStream(byte[] array) {
@@ -55,7 +61,7 @@ public class UnityStream extends ByteStream {
     public String ReadAlignedString() {
         int length = readInt();
         if (length > 0 && length <= trueLen - getPos()) {
-            var str = new String(readBytes(length), StandardCharsets.UTF_8);
+            var str = new String(ArrayUtils.toPrimitive(readBytes(length)), StandardCharsets.UTF_8);
             AlignStream();
             return str;
         }
@@ -113,67 +119,68 @@ public class UnityStream extends ByteStream {
     }
 
     public Matrix4f ReadMatrix() {
-        return new Matrix4f(readFloats(16));
+        return new Matrix4f(ArrayUtils.toPrimitive(readFloats(16)));
     }
 
     public Matrix4f[] readMatrices(int n) {
         return readArray(this::ReadMatrix, new Matrix4f[n]);
     }
 
-    public boolean[] ReadBooleanArray() {
+    public Boolean[] ReadBooleanArray() {
         return readBooleans(readInt());
     }
 
-    public byte[] ReadUint8Array() {
+    public Byte[] ReadUint8Array() {
         return readBytes(readInt());
     }
 
-    public short[] ReadUint16Array() {
+    public Short[] ReadUint16Array() {
         return readShorts(readInt());
     }
 
-    public int[] ReadInt32Array() {
+    public Integer[] ReadInt32Array() {
         return readInts(readInt());
     }
 
-    public int[] ReadInt32Array(int n) {
+    public Integer[] ReadInt32Array(int n) {
         return readInts(n);
     }
 
-    public int[] ReadUint32Array() {
+    public Integer[] ReadUint32Array() {
         return readInts(readInt());
     }
 
-    public int[][] ReadUint32ArrayArray() {
-        return readArray(this::ReadUint32Array, new Integer[readInt()][]);
+    public Integer[][] ReadUint32ArrayArray() {
+        var cap = readInt();
+        return readArray(this::ReadUint32Array, new Integer[cap][cap]);
     }
 
-    public int[] ReadUint32Array(, int length) {
-        return ReadArray(reader.Readint32, length);
+    public Integer[] ReadUint32Array(int n) {
+        return readArray(this::readInt, new Integer[n]);
     }
 
-    public float[] ReadSingleArray() {
-        return ReadArray(reader.ReadSingle, reader.ReadInt32());
+    public Float[] ReadSingleArray() {
+        return readArray(this::readFloat, new Float[readInt()]);
     }
 
-    public float[] ReadSingleArray(, int length) {
-        return ReadArray(reader.ReadSingle, length);
+    public Float[] ReadSingleArray(int n) {
+        return readArray(this::readFloat, new Float[n]);
     }
 
     public String[] ReadStringArray() {
-        return ReadArray(reader.ReadAlignedString, reader.ReadInt32());
+        return readArray(this::ReadAlignedString, new String[readInt()]);
     }
 
     public Vector2f[] ReadVector2Array() {
-        return ReadArray(reader.ReadVector2, reader.ReadInt32());
+        return readArray(this::ReadVector2, new Vector2f[readInt()]);
     }
 
     public Vector4f[] ReadVector4Array() {
-        return ReadArray(reader.ReadVector4, reader.ReadInt32());
+        return readArray(this::ReadVector4, new Vector4f[readInt()]);
     }
 
     public Matrix4f[] ReadMatrixArray() {
-        return ReadArray(reader.ReadMatrix, reader.ReadInt32());
+        return readArray(this::ReadMatrix, new Matrix4f[readInt()]);
     }
 
     @Override

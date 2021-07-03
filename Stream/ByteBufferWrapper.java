@@ -1,5 +1,7 @@
 package com.QYun.util.Stream;
 
+import org.apache.commons.lang.ArrayUtils;
+
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -13,6 +15,10 @@ public abstract class ByteBufferWrapper {
 
     public ByteBufferWrapper(byte[] array) {
         byteBuffer = ByteBuffer.wrap(array);
+    }
+
+    public ByteBufferWrapper(Byte[] array) {
+        byteBuffer = ByteBuffer.wrap(ArrayUtils.toPrimitive(array));
     }
 
     public ByteBufferWrapper(byte[] array, int offset, int length) {
