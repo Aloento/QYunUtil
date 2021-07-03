@@ -48,6 +48,10 @@ public class UnityStream extends ByteStream {
         super(reader.byteBuffer);
     }
 
+    public Boolean ReadBoolean() {
+        return readBoolean();
+    }
+
     public Short ReadInt16() {
         return readShort();
     }
