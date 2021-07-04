@@ -190,7 +190,7 @@ public class UnityStream extends ByteStream {
         return readInts(readInt());
     }
 
-    public Integer[][] ReadUint32ArrayArray() {
+    public Integer[][] ReadUInt32ArrayArray() {
         var cap = readInt();
         return readArray(this::ReadUInt32Array, new Integer[cap][cap]);
     }
