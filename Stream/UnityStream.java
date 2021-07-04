@@ -48,79 +48,39 @@ public class UnityStream extends ByteStream {
         super(reader.byteBuffer);
     }
 
-    public Byte ReadByte() {
-        return readByte();
+    public void alignStream() {
+        alignStream(4);
     }
 
-    public Byte[] ReadBytes(int n) {
-        return readBytes(n);
-    }
-
-    public Boolean ReadBoolean() {
-        return readBoolean();
-    }
-
-    public Short ReadInt16() {
-        return readShort();
-    }
-
-    public Integer ReadInt32() {
-        return readInt();
-    }
-
-    public Long ReadInt64() {
-        return readLong();
-    }
-
-    public Short ReadUInt16() {
-        return readShort();
-    }
-
-    public Integer ReadUInt32() {
-        return readInt();
-    }
-
-    public Long ReadUInt64() {
-        return readLong();
-    }
-
-    public Float ReadSingle() {
-        return readFloat();
-    }
-
-    public Double ReadDouble() {
-        return readDouble();
-    }
-
-    public void AlignStream() {
-        AlignStream(4);
-    }
-
-    public void AlignStream(int alignment) {
+    public void alignStream(int alignment) {
         var mod = getPos() % alignment;
         if (mod != 0)
             setPos(getPos() + alignment - mod);
     }
 
-    public String ReadAlignedString() {
+    public String readAlignedString() {
         int length = readInt();
         if (length > 0 && length <= trueLen - getPos()) {
             var str = new String(ArrayUtils.toPrimitive(readBytes(length)), StandardCharsets.UTF_8);
-            AlignStream();
+            alignStream();
             return str;
         }
         return "";
     }
 
-    public String[] readStrings(int n) {
-        return readArray(this::ReadAlignedString, new String[n]);
+    public String[] readStringArray() {
+        return readArray(this::readAlignedString, new String[readInt()]);
     }
 
-    public String ReadStringToNull() {
-        return ReadStringToNull(32767);
+    public String[] readStringArray(int n) {
+        return readArray(this::readAlignedString, new String[n]);
     }
 
-    public String ReadStringToNull(int maxLength) {
+    public String readStringToNull() {
+        return readStringToNull(32767);
+    }
+
+    public String readStringToNull(int maxLength) {
         var bytes = new ByteArrayOutputStream();
         int i = 0;
         while (getPos() != capacity() && i < maxLength) {
@@ -133,98 +93,78 @@ public class UnityStream extends ByteStream {
         return bytes.toString(StandardCharsets.UTF_8);
     }
 
-    public Quat4f ReadQuaternion() {
+    public Quat4f readQuaternion() {
         return new Quat4f(readFloat(), readFloat(), readFloat(), readFloat());
     }
 
-    public Vector2f ReadVector2() {
+    public Vector2f readVector2() {
         return new Vector2f(readFloat(), readFloat());
     }
 
-    public Vector2f[] readVector2s(int n) {
-        return readArray(this::ReadVector2, new Vector2f[n]);
+    public Vector2f[] readVector2Array() {
+        return readArray(this::readVector2, new Vector2f[readInt()]);
     }
 
-    public Vector3f ReadVector3() {
+    public Vector3f readVector3() {
         return new Vector3f(readFloat(), readFloat(), readFloat());
     }
 
-    public Vector4f ReadVector4() {
+    public Vector4f readVector4() {
         return new Vector4f(readFloat(), readFloat(), readFloat(), readFloat());
     }
 
+    public Vector4f[] readVector4Array() {
+        return readArray(this::readVector4, new Vector4f[readInt()]);
+    }
+
     public Vector3f read4ToVector3() {
-        var tmp = ReadVector4();
+        var tmp = readVector4();
         return new Vector3f(tmp.x, tmp.y, tmp.z);
     }
 
-    public Color4f ReadColor4() {
+    public Color4f readColor4() {
         return new Color4f(readFloat(), readFloat(), readFloat(), readFloat());
     }
 
-    public Matrix4f ReadMatrix() {
+    public Matrix4f readMatrix() {
         return new Matrix4f(ArrayUtils.toPrimitive(readFloats(16)));
     }
 
-    public Matrix4f[] readMatrices(int n) {
-        return readArray(this::ReadMatrix, new Matrix4f[n]);
+    public Matrix4f[] readMatrixArray() {
+        return readArray(this::readMatrix, new Matrix4f[readInt()]);
     }
 
-    public Boolean[] ReadBooleanArray() {
+    public Boolean[] readBooleanArray() {
         return readBooleans(readInt());
     }
 
-    public Byte[] ReadUInt8Array() {
+    public Byte[] readByteArray() {
         return readBytes(readInt());
     }
 
-    public Short[] ReadUInt16Array() {
+    public Short[] readShortArray() {
         return readShorts(readInt());
     }
 
-    public Integer[] ReadInt32Array() {
+    public Integer[] readIntArray() {
         return readInts(readInt());
     }
 
-    public Integer[] ReadInt32Array(int n) {
+    public Integer[] readIntArray(int n) {
         return readInts(n);
     }
 
-    public Integer[] ReadUInt32Array() {
-        return readInts(readInt());
-    }
-
-    public Integer[][] ReadUInt32ArrayArray() {
+    public Integer[][] readIntArrayArray() {
         var cap = readInt();
-        return readArray(this::ReadUInt32Array, new Integer[cap][cap]);
+        return readArray(this::readIntArray, new Integer[cap][cap]);
     }
 
-    public Integer[] ReadUInt32Array(int n) {
-        return readArray(this::readInt, new Integer[n]);
+    public Float[] readFloatArray() {
+        return readFloats(readInt());
     }
 
-    public Float[] ReadSingleArray() {
-        return readArray(this::readFloat, new Float[readInt()]);
-    }
-
-    public Float[] ReadSingleArray(int n) {
-        return readArray(this::readFloat, new Float[n]);
-    }
-
-    public String[] ReadStringArray() {
-        return readArray(this::ReadAlignedString, new String[readInt()]);
-    }
-
-    public Vector2f[] ReadVector2Array() {
-        return readArray(this::ReadVector2, new Vector2f[readInt()]);
-    }
-
-    public Vector4f[] ReadVector4Array() {
-        return readArray(this::ReadVector4, new Vector4f[readInt()]);
-    }
-
-    public Matrix4f[] ReadMatrixArray() {
-        return readArray(this::ReadMatrix, new Matrix4f[readInt()]);
+    public Float[] readFloatArray(int n) {
+        return readFloats(n);
     }
 
     @Override
