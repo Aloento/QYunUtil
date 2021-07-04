@@ -52,6 +52,10 @@ public class UnityStream extends ByteStream {
         return readByte();
     }
 
+    public Byte[] ReadBytes(int n) {
+        return readBytes(n);
+    }
+
     public Boolean ReadBoolean() {
         return readBoolean();
     }
